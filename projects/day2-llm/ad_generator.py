@@ -58,6 +58,43 @@ def calculate_estimated_reach(location):
         return "Medium (100K+ potential reach)"
 
 
+def score_ad_quality(ad_text):
+    """Score ad copy based on marketing best practices"""
+    score = 0
+    feedback = []
+    
+    # Check for call-to-action words
+    cta_words = ["visit", "call", "book", "order", "try", "discover", "join", "get"]
+    if any(word in ad_text.lower() for word in cta_words):
+        score += 25
+        feedback.append("+ Strong call-to-action")
+    else:
+        feedback.append("- Missing clear call-to-action")
+    
+    # Check for urgency
+    urgency_words = ["today", "now", "limited", "exclusive", "offer"]
+    if any(word in ad_text.lower() for word in urgency_words):
+        score += 25
+        feedback.append("+ Creates urgency")
+    
+    # Check length (50-70 words ideal)
+    word_count = len(ad_text.split())
+    if 50 <= word_count <= 70:
+        score += 25
+        feedback.append("+ Optimal length")
+    elif word_count < 50:
+        feedback.append("- Too short")
+    else:
+        feedback.append("- Too long")
+    
+    # Check for emotional words
+    emotion_words = ["love", "amazing", "best", "perfect", "favorite", "trust"]
+    if any(word in ad_text.lower() for word in emotion_words):
+        score += 25
+        feedback.append("+ Emotional appeal")
+    
+    return score, feedback
+
 def main():
     print("\n" + "="*60)
     print("AD COPY GENERATOR - Location-Based Marketing")
@@ -73,6 +110,27 @@ def main():
     
     print("\nGENERATED AD COPIES:\n")
     print(ads)
+    
+    # Analyze ad quality
+    print("\n" + "-"*60)
+    print("AD QUALITY ANALYSIS:")
+    print("-"*60)
+    
+    # Score first ad
+    ad_parts = ads.split('\n')
+    first_ad = ""
+    for line in ad_parts:
+        if line.strip() and not line.strip().startswith('1.'):
+            continue
+        if line.strip().startswith('1.'):
+            first_ad = line
+            break
+    
+    if first_ad:
+        score, feedback = score_ad_quality(first_ad)
+        print(f"\nAd #1 Quality Score: {score}/100")
+        for item in feedback:
+            print(f"  {item}")
     
     # Show estimated reach
     reach = calculate_estimated_reach(location)

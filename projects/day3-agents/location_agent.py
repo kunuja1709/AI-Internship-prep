@@ -13,7 +13,7 @@ from datetime import datetime
 
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
+# Note: Using Groq instead of OpenAI for cost efficiency during development
 
 class LocationAnalyzer:
     """Handles location data fetching and analysis"""
